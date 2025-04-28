@@ -100,7 +100,7 @@ const createLink = [
     .isInt()
     .withMessage("Organization ID must be an integer.")
     .custom(async (value, { req }) => {
-      const organization = await query.organization.find({ id: value, user_id: req.user.id });
+      const organization = await query.organization.find({ id: value });
       if (!organization) {
         return Promise.reject("Organization not found or does not belong to the user.");
       }

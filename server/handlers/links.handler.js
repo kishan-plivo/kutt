@@ -102,10 +102,7 @@ async function create(req, res) {
   // Fetch domain based on org_id if no domain is provided via fetched_domain
   let domainToUse = fetched_domain;
   if (!domainToUse && org_id) {
-    const organization = await query.organization.find({ id: org_id }); // Assuming organization query exists
-    if (organization && organization.domain_id) {
-      domainToUse = await query.domain.find({ id: organization.domain_id });
-    }
+    domainToUse = await query.domain.find({ org_id: org_id }); 
   }
   const domain_id = domainToUse ? domainToUse.id : null;
   

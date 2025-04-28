@@ -94,7 +94,17 @@ const createLink = [
 
       if (!domain) return Promise.reject();
     })
-    .withMessage("You can't use this domain.")
+    .withMessage("You can't use this domain."),
+  body("org_id", "Organization ID is missing or invalid.")
+    .exists({ checkNull: true, checkFalsy: true })
+    .isInt()
+    .withMessage("Organization ID must be an integer.")
+    .custom(async (value, { req }) => {
+      const organization = await query.organization.find({ id: value, user_id: req.user.id });
+      if (!organization) {
+        return Promise.reject("Organization not found or does not belong to the user.");
+      }
+    })
 ];
 
 const editLink = [

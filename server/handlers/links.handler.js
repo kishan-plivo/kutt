@@ -97,8 +97,17 @@ async function getAdmin(req, res) {
 };
 
 async function create(req, res) {
-  const { reuse, password, customurl, description, target, fetched_domain, expire_in } = req.body;
-  const domain_id = fetched_domain ? fetched_domain.id : null;
+  const { reuse, password, customurl, description, target, fetched_domain, expire_in, org_id } = req.body;
+  
+  // Fetch domain based on org_id if no domain is provided via fetched_domain
+  let domainToUse = fetched_domain;
+  if (!domainToUse && org_id) {
+    const organization = await query.organization.find({ id: org_id }); // Assuming organization query exists
+    if (organization && organization.domain_id) {
+      domainToUse = await query.domain.find({ id: organization.domain_id });
+    }
+  }
+  const domain_id = domainToUse ? domainToUse.id : null;
   
   const targetDomain = utils.removeWww(URL.parse(target).hostname);
   
@@ -141,10 +150,11 @@ async function create(req, res) {
     description,
     target,
     expire_in,
-    user_id: req.user && req.user.id
+    user_id: req.user && req.user.id,
+    org_id
   });
 
-  link.domain = fetched_domain?.address;
+  link.domain = domainToUse?.address;
   
   if (req.isHTML) {
     res.setHeader("HX-Trigger", "reloadMainTable");

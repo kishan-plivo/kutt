@@ -21,7 +21,7 @@ async function createDomainTable(knex) {
       table.uuid("uuid").notNullable().defaultTo(knex.fn.uuid());
       table.timestamps(false, true);
       table
-        .integer("organisation_id")
+        .integer("org_id")
         .unsigned()
         .references("id")
         .inTable("organisations");

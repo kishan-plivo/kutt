@@ -185,7 +185,11 @@ const addDomain = [
     .optional({ checkFalsy: true, nullable: true })
     .customSanitizer(utils.addProtocol)
     .custom(value => utils.urlRegex.test(value) || /^(?!https?|ftp)(\w+:|\/\/)/.test(value))
-    .withMessage("Homepage is not valid.")
+    .withMessage("Homepage is not valid."),
+  body("org_id", "Organization ID is missing or invalid.")
+    .exists({ checkNull: true, checkFalsy: true })
+    .isInt()
+    .withMessage("Organization ID must be an integer.")
 ];
 
 const addDomainAdmin = [
@@ -216,7 +220,11 @@ const addDomainAdmin = [
     .optional({ nullable: true })
     .customSanitizer(sanitizeCheckbox)
     .isBoolean(),
-]
+  body("org_id", "Organization ID is missing or invalid.")
+    .exists({ checkNull: true, checkFalsy: true })
+    .isInt()
+    .withMessage("Organization ID must be an integer.")
+];
 
 const removeDomain = [
   param("id", "ID is invalid.")

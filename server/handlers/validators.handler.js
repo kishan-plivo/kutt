@@ -94,7 +94,17 @@ const createLink = [
 
       if (!domain) return Promise.reject();
     })
-    .withMessage("You can't use this domain.")
+    .withMessage("You can't use this domain."),
+  body("org_id", "Organization ID is missing or invalid.")
+    .exists({ checkNull: true, checkFalsy: true })
+    .isInt()
+    .withMessage("Organization ID must be an integer.")
+    .custom(async (value, { req }) => {
+      const organization = await query.organization.find({ id: value });
+      if (!organization) {
+        return Promise.reject("Organization not found or does not belong to the user.");
+      }
+    })
 ];
 
 const editLink = [
@@ -185,7 +195,11 @@ const addDomain = [
     .optional({ checkFalsy: true, nullable: true })
     .customSanitizer(utils.addProtocol)
     .custom(value => utils.urlRegex.test(value) || /^(?!https?|ftp)(\w+:|\/\/)/.test(value))
-    .withMessage("Homepage is not valid.")
+    .withMessage("Homepage is not valid."),
+  body("org_id", "Organization ID is missing or invalid.")
+    .exists({ checkNull: true, checkFalsy: true })
+    .isInt()
+    .withMessage("Organization ID must be an integer.")
 ];
 
 const addDomainAdmin = [
@@ -216,7 +230,11 @@ const addDomainAdmin = [
     .optional({ nullable: true })
     .customSanitizer(sanitizeCheckbox)
     .isBoolean(),
-]
+  body("org_id", "Organization ID is missing or invalid.")
+    .exists({ checkNull: true, checkFalsy: true })
+    .isInt()
+    .withMessage("Organization ID must be an integer.")
+];
 
 const removeDomain = [
   param("id", "ID is invalid.")

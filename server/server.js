@@ -68,6 +68,9 @@ app.use("/", routes.render);
 app.use("/api/v2", routes.api);
 app.use("/api", routes.api);
 
+// Serve API documentation
+app.use('/docs', express.static(path.join(__dirname, '../docs/api/static')));
+
 // finally, redirect the short link to the target
 app.get("/:id", asyncHandler(links.redirect));
 

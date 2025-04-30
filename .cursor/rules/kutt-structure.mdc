@@ -1,0 +1,41 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Kutt Project Structure Guide
+
+This document provides a high-level overview of the Kutt URL shortener codebase structure.
+
+## Core Components
+
+*   **Server Entry Point:** The main application entry point is [server/server.js](mdc:server/server.js). This file initializes the Express server and loads necessary configurations.
+*   **Configuration:** Environment variables are managed using the `dotenv` package and loaded from the [.env](mdc:.env) file. An example configuration can be found in [.example.env](mdc:.example.env).
+*   **API Routes:** API endpoints are defined within the [server/routes/](mdc:server/routes) directory. Each file typically corresponds to a specific resource or feature set.
+*   **Request Handlers:** Logic for handling incoming requests is often located in [server/handlers/](mdc:server/handlers).
+*   **Authentication:** Authentication strategies (local, JWT, API key) are configured using Passport.js, likely within the server setup or dedicated auth files.
+
+## Database
+
+*   **Configuration:** Database connection details and Knex configuration are specified in [knexfile.js](mdc:knexfile.js).
+*   **Migrations:** Database schema changes are managed through Knex migrations located in [db/migrations/](mdc:db/migrations). Run migrations using `npm run migrate`.
+*   **Models:** Database table representations (models) can be found in [server/models/](mdc:server/models).
+*   **Queries:** Reusable database query logic might be present in [server/queries/](mdc:server/queries).
+
+## Frontend & Views
+
+*   **Static Assets:** Publicly served static files like CSS, JavaScript, images, and libraries reside in the [static/](mdc:static) directory.
+*   **Views/Templates:** Server-rendered Handlebars (hbs) templates are located in [server/views/](mdc:server/views). Partials used across multiple views are in `server/views/partials/`.
+
+## Background Processing
+
+*   **Queues:** Background jobs (e.g., email sending, potentially analytics processing) are managed using Bull message queue, likely defined in files within [server/queues/](mdc:server/queues).
+
+## Development & Deployment
+
+*   **Package Management:** Project dependencies are managed using npm and defined in [package.json](mdc:package.json).
+*   **Docker:** Docker configurations for building and running the application in containers are provided in [Dockerfile](mdc:Dockerfile) and various `docker-compose.*.yml` files (e.g., [docker-compose.yml](mdc:docker-compose.yml)).
+*   **Customization:** The [custom/](mdc:custom) directory might be intended for user-specific overrides or extensions.
+*   **API Documentation:** API documentation generation logic seems to be in [docs/api/](mdc:docs/api). Build docs using `npm run docs:build`.
+
+This guide should help navigate the Kutt codebase. Refer to the specific files and directories linked for more detailed information.

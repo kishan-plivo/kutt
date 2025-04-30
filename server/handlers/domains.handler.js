@@ -7,12 +7,13 @@ const utils = require("../utils");
 const env = require("../env");
 
 async function add(req, res) {
-  const { address, homepage } = req.body;
+  const { address, homepage, org_id } = req.body;
 
   const domain = await query.domain.add({
     address,
     homepage,
-    user_id: req.user.id
+    user_id: req.user.id,
+    org_id
   });
 
   if (req.isHTML) {
@@ -28,12 +29,13 @@ async function add(req, res) {
 };
 
 async function addAdmin(req, res) {
-  const { address, banned, homepage } = req.body;
+  const { address, banned, homepage, org_id } = req.body;
 
   const domain = await query.domain.add({
     address,
     homepage,
     banned,
+    org_id,
     ...(banned && { banned_by_id: req.user.id })
   });
 

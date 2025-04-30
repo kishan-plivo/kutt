@@ -35,7 +35,8 @@ async function add(params) {
     homepage: params.homepage,
     user_id: params.user_id,
     banned: !!params.banned,
-    banned_by_id: params.banned_by_id
+    banned_by_id: params.banned_by_id,
+    org_id: params.org_id
   };
 
   if (id) {
